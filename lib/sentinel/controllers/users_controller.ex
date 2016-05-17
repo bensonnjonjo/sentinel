@@ -20,9 +20,7 @@ defmodule Sentinel.Controllers.Users do
                                       |> Confirmator.confirmation_needed_changeset
 
     if changeset.valid? do
-      case Util.repo.transaction fn ->
-        Util.repo.insert(changeset)
-      end do
+      case Util.repo.insert(changeset) do
         {:ok, user} ->
           confirmable_and_invitable(conn, user, confirmation_token)
         {:error, changeset} ->
