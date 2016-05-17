@@ -21,10 +21,12 @@ defmodule Sentinel.Controllers.Users do
 
     if changeset.valid? do
       case Util.repo.transaction fn ->
-        Util.repo.insert!(changeset)
+        Util.repo.insert(changeset)
       end do
         {:ok, user} ->
           confirmable_and_invitable(conn, user, confirmation_token)
+        {:error, changeset} ->
+          Util.send_error(conn, Enum.into(changeset.errors, %{}))
       end
     else
       Util.send_error(conn, Enum.into(changeset.errors, %{}))
