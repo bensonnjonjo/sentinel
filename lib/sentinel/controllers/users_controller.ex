@@ -20,11 +20,11 @@ defmodule Sentinel.Controllers.Users do
                                       |> Confirmator.confirmation_needed_changeset
 
     if changeset.valid? do
-      case util.repo.insert(changeset) do
+      case Util.repo.insert(changeset) do
         {:ok, user} ->
           confirmable_and_invitable(conn, user, confirmation_token)
         {:error, changeset} ->
-          util.send_error(conn, enum.into(changeset.errors, %{}))
+          Util.send_error(conn, Enum.into(changeset.errors, %{}))
       end
     else
       Util.send_error(conn, Enum.into(changeset.errors, %{}))
@@ -35,11 +35,11 @@ defmodule Sentinel.Controllers.Users do
     changeset = Registrator.changeset(params["user"])
 
     if changeset.valid? do
-      case util.repo.insert(changeset) do
+      case Util.repo.insert(changeset) do
         {:ok, user} ->
           confirmable_and_invitable(conn, user, "")
         {:error, changeset} ->
-          util.send_error(conn, enum.into(changeset.errors, %{}))
+          Util.send_error(conn, Enum.into(changeset.errors, %{}))
       end
     else
       Util.send_error(conn, Enum.into(changeset.errors, %{}))
