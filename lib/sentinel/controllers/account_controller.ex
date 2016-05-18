@@ -16,7 +16,7 @@ defmodule Sentinel.Controllers.Account do
   Responds with status 200 and body view show JSON
   """
   def show(conn, _params, current_user, _claims \\ %{}) do
-    json conn, :ok
+    json conn, ViewHelper.user_view.render("show.json", %{user: Guardian.Plug.current_resource(conn)})
   end
 
   @doc """
